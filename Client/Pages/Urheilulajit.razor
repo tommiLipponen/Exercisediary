@@ -1,0 +1,58 @@
+﻿@page "/urheilulajit"
+@inject IClientExerciseTypeData ClientExerciseTypeData
+@inject NavigationManager NavigationManager
+
+<PageTitle>Urheilulajit</PageTitle>
+<h3>Urheilulajit</h3>
+<style>
+    #muokkaabutton { 
+        float: right;
+    }
+</style>
+
+<button class="btn btn-success" @onclick="CreateNewExerciseType">Lisää Laji</button>
+<div class="col-sm-5">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Urheilulaji</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var type in ClientExerciseTypeData.Types)
+            {
+                <tr>
+                    <td>@type.ExerciseName</td>
+                    
+                    <td>
+                        
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" id="muokkaabutton" @onclick="(() => ShowExerciseType(type.ExerciseTypeId))">Muokkaa</button>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await ClientExerciseTypeData.GetExerciseTypes();
+    }
+
+    void ShowExerciseType(Guid id)
+    {
+        NavigationManager.NavigateTo($"urheilulaji/{id}");
+    }
+
+    void CreateNewExerciseType()
+    {
+        NavigationManager.NavigateTo("/urheilulaji");
+    }
+}

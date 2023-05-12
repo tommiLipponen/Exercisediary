@@ -1,0 +1,322 @@
+﻿@page "/harjoite"
+@page "/harjoite/{id:guid}"
+@using Exercisediary.Shared
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.QuickGrid;
+@inject NavigationManager NavigationManager
+@inject IClientExerciseData ClientExerciseData
+@inject IClientExerciseTypeData ClientExerciseTypeData
+@inject IClientLocationData ClientLocationData
+<h3>Harjoite</h3>
+
+@if (exercise == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    if(Id is null)
+    {
+        <PageTitle>Kirjaa Uusi Harjoite</PageTitle>
+        <h3>Kirjaa Uusi Harjoite</h3>
+
+        <div class="row">
+            <div class="col-sm-5">
+                <EditForm Model="exercise" OnValidSubmit="@HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label for="exerciseTypeId">Urheilulaji</label>
+                            <select class="form-control" id="exerciseTypeId" @bind="@exercise.ExerciseTypeId">
+                                @foreach (var exerciseType in ClientExerciseTypeData.Types)
+                                {
+                                    <option value="@exerciseType.ExerciseTypeId">@exerciseType.ExerciseName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label for="locationId">Kunta</label>
+                            <select class="form-control" id="locationId" @bind="@exercise.LocationId">
+                                @foreach (var location in ClientLocationData.Paikat)
+                                {
+                                    <option value="@location.LocationId">@location.City</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label for="startTime">Start Time</label>
+                            <InputDate Type="InputDateType.DateTimeLocal" class="form-control" id="startTime" @bind-Value="@exercise.StartTime" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label for="endTime">End Time</label>
+                            <InputDate Type="InputDateType.DateTimeLocal" class="form-control" id="endTime" @bind-Value="@exercise.EndTime" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label for="duration">Duration Min</label>
+                            <InputNumber class="form-control" id="duration" @bind-Value="@exercise.Duration" disabled title="Lasketaan automaattisesti" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label for="bmpCount">Bmp Count</label>
+                            <InputNumber class="form-control" id="bmpCount" @bind-Value="@exercise.BmpCount" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label for="caloriesBurned">Calories Burned</label>
+                            <InputNumber class="form-control" id="caloriesBurned" @bind-Value="@exercise.CaloriesBurned" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label for="notes">Notes</label>
+                            <InputTextArea class="form-control" id="notes" @bind-Value="@exercise.Notes" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label for="startpointlat">StartpointLat</label>
+                            <InputNumber min="-9999999.999999" max="9999999.999999" step="0.000001" 
+                                          class="form-control" id="startpointlat" @bind-Value="@exercise.StartpointLat" title="Käytä Desimaalipilkkua." />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label for="startpointlong">StartpointLong</label>
+                            <InputNumber min="-9999999.999999" max="9999999.999999" step="0.000001" 
+                                         class="form-control" id="startpointlong" @bind-Value="@exercise.StartpointLong" title="Käytä Desimaalipilkkua." />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label for="endpointlat">EndpointLat</label>
+                            <InputNumber min="-9999999.999999" max="9999999.999999" step="0.000001" 
+                                         class="form-control" id="endpointlat" @bind-Value="@exercise.EndpointLat" title="Käytä Desimaalipilkkua." />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label for="endpointlong">EndpointLong</label>
+                            <InputNumber min="-9999999.999999" max="9999999.999999" step="0.000001" 
+                                         class="form-control" id="endpointlong" @bind-Value="@exercise.EndpointLong" title="Käytä Desimaalipilkkua." />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label for="meterstraveled">Meters Traveled</label>
+                            <InputNumber class="form-control" id="meterstraveled" @bind-Value="@exercise.MetersTraveled" />
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">@btnText</button>                    
+                    <button type="button" class="btn btn-secondary" @onclick="Cancel">Peruuta</button>
+                </EditForm>
+            </div>
+        </div>
+    }
+    else
+    {
+        <PageTitle>Muokkaa Harjoitteen Tietoja</PageTitle>
+        <h3>Muokkaa Harjoitteen Tietoja</h3>
+
+        <div class="row">
+            <div class="col-sm-5">
+                <EditForm Model="@exercise" OnValidSubmit="@HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                <div class="mb-3">
+                    <div class="form-group">
+                        <label for="exerciseTypeId">Urheilulaji</label>
+                        <select class="form-control" id="exerciseTypeId" @bind="@exercise.ExerciseTypeId">
+                            @foreach (var exerciseType in ClientExerciseTypeData.Types)
+                            {
+                                <option value="@exerciseType.ExerciseTypeId">@exerciseType.ExerciseName</option>
+                            }
+                        </select>
+                    </div>
+                    </div>
+
+                    <div class="mb-3">
+                    <div class="form-group">
+                        <label for="locationId">Kunta</label>
+                        <select class="form-control" id="locationId" @bind="@exercise.LocationId">
+                            @foreach (var location in ClientLocationData.Paikat)
+                            {
+                                <option value="@location.LocationId">@location.City</option>
+                            }
+                        </select>
+                    </div>
+                    </div>
+
+                    <div class="mb-3">
+                    <div class="form-group">
+                        <label for="startTime">Start Time</label>
+                        <InputDate Type="InputDateType.DateTimeLocal" class="form-control" id="endTime" @bind-Value="@exercise.StartTime" />                       
+                    </div>
+                    </div>
+
+                    <div class="mb-3">
+                    <div class="form-group">
+                        <label for="endTime">End Time</label>
+                        <InputDate Type="InputDateType.DateTimeLocal" class="form-control" id="endTime" @bind-Value="@exercise.EndTime" />
+                    </div>
+                    </div>
+
+                    <div class="mb-3">
+                    <div class="form-group">
+                        <label for="duration">Duration Min</label>
+                        <InputNumber class="form-control" id="duration" @bind-Value="@exercise.Duration" disabled title="Lasketaan automaattisesti" />
+                    </div>
+                    </div>
+
+                    <div class="mb-3">
+                    <div class="form-group">
+                        <label for="bmpCount">Bmp Count</label>
+                        <InputNumber class="form-control" id="bmpCount" @bind-Value="@exercise.BmpCount" />
+                    </div>
+                    </div>
+
+                    <div class="mb-3">
+                    <div class="form-group">
+                        <label for="caloriesBurned">Calories Burned</label>
+                        <InputNumber class="form-control" id="caloriesBurned" @bind-Value="@exercise.CaloriesBurned" />
+                    </div>
+                    </div>
+
+                    <div class="mb-3">
+                    <div class="form-group">
+                        <label for="notes">Notes</label>
+                        <InputTextArea class="form-control" id="notes" @bind-Value="@exercise.Notes" />
+                    </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label for="startpointlat">StartpointLat</label>
+                            <InputNumber min="-9999999.999999" max="9999999.999999" step="0.000001"
+                                         class="form-control" id="startpointlat" @bind-Value="@exercise.StartpointLat" title="Käytä Desimaalipilkkua." />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label for="startpointlong">StartpointLong</label>
+                            <InputNumber min="-9999999.999999" max="9999999.999999" step="0.000001"
+                                         class="form-control" id="startpointlong" @bind-Value="@exercise.StartpointLong" title="Käytä Desimaalipilkkua." />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label for="endpointlat">EndpointLat</label>
+                            <InputNumber min="-9999999.999999" max="9999999.999999" step="0.000001"
+                                         class="form-control" id="endpointlat" @bind-Value="@exercise.EndpointLat" title="Käytä Desimaalipilkkua." />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label for="endpointlong">EndpointLong</label>
+                            <InputNumber min="-9999999.999999" max="9999999.999999" step="0.000001"
+                                         class="form-control" id="endpointlong" @bind-Value="@exercise.EndpointLong" title="Käytä Desimaalipilkkua." />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                    <div class="form-group">
+                        <label for="meterstraveled">Meters Traveled</label>
+                        <InputNumber class="form-control" id="meterstraveled" @bind-Value="@exercise.MetersTraveled" />
+                    </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">@btnText</button>
+                    <button type="button" class="btn btn-danger" @onclick="DeleteExercise">Poista Suoritustiedot</button>
+                    <button type="button" class="btn btn-secondary" @onclick="Cancel">Peruuta</button>
+                </EditForm>
+            </div>
+        </div>
+    }
+}
+
+
+@code {
+    [Parameter]
+    public Guid? Id { get; set; }
+    private Exercise exercise = new()
+    {
+        StartTime = DateTime.Now,
+        EndTime = DateTime.Now
+    };  
+    string btnText = string.Empty;
+   
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        btnText = Id == null ? "Tallenna Uusi Suorite" : "Tallenna Muutos";
+        
+        await ClientLocationData.GetLocations();
+        await ClientExerciseTypeData.GetExerciseTypes();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id is not null)
+        {
+            var result = await ClientExerciseData.GetExerciseByIdAsync((Guid)Id);
+            if (result is not null)
+            {
+                exercise = result;
+            }
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/harjoite");
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (Id is null)
+        {
+            await ClientExerciseData.AddExerciseAsync(exercise);
+        }
+        else
+        {
+            await ClientExerciseData.UpdateExerciseAsync((Guid)Id, exercise);
+        }       
+    }
+
+    private async Task DeleteExercise()
+    {
+        await ClientExerciseData.DeleteExerciseByIdAsync(exercise.ExerciseId);
+    }
+
+    private void Cancel()
+    {
+        NavigationManager.NavigateTo("/harjoitteet");
+    }
+}

@@ -1,0 +1,53 @@
+﻿@page "/suorituspaikat"
+@inject IClientLocationData ClientLocationData
+@inject NavigationManager NavigationManager
+
+<PageTitle>Suorituspaikat</PageTitle>
+<h3>Suorituspaikat</h3>
+<style>
+    #muokkaabutton {
+        float: right;
+    }
+</style>
+
+<button class="btn btn-success" @onclick="CreateNewLocation">Lisää Uusi Paikka</button>
+<div class="col-sm-5">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Kunta</th>
+                <th>Paikka</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var paikka in ClientLocationData.Paikat)
+            {
+                <tr>
+                    <td>@paikka.City</td>
+                    <td>@paikka.Place</td>                    
+                    <td>
+                        <button class="btn btn-primary" id="muokkaabutton" @onclick="(() => ShowLocation(paikka.LocationId))">Muokkaa</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await ClientLocationData.GetLocations();
+    }
+
+    void ShowLocation(Guid id)
+    {
+        NavigationManager.NavigateTo($"suorituspaikka/{id}");
+    }
+
+    void CreateNewLocation()
+    {
+        NavigationManager.NavigateTo("/suorituspaikka");
+    }
+}

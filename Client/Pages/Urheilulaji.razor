@@ -1,0 +1,93 @@
+﻿@page "/urheilulaji"
+@page "/urheilulaji/{id:guid}"
+@using Exercisediary.Shared;
+@inject IClientExerciseTypeData ClientExerciseTypeData
+@inject NavigationManager NavigationManager
+
+@if(Id is null)
+{
+    <PageTitle>Lisää Urheilulaji</PageTitle>
+    <h3>Lisää Urheilulaji</h3>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <EditForm Model="type" OnSubmit="HandleSubmit">
+                <div class="mb-3">
+                    <label for="exercisename">Urheilulaji</label>
+                    <InputText id="exercisename" @bind-Value="type.ExerciseName" class="form-control"></InputText>
+                </div>
+                <button type="submit" class="btn btn-primary">@btnText</button>
+                <button type="button" class="btn btn-secondary" @onclick="Cancel">Peruuta</button>
+            </EditForm>
+        </div>
+    </div>
+}
+else
+{
+    <PageTitle>Muokkaa @type.ExerciseName</PageTitle>
+    <h3>Muokkaa @type.ExerciseName</h3>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <EditForm Model="type" OnSubmit="HandleSubmit">
+                <div class="mb-3">
+                    <label for="exercisename">Urheilulaji</label>
+                    <InputText id="exercisename" @bind-Value="type.ExerciseName" class="form-control"></InputText>
+                </div>
+                <button type="submit" class="btn btn-primary">@btnText</button>
+                <button type="button" class="btn btn-danger" @onclick="DeleteExerciseType">Poista Laji</button>
+                <button type="button" class="btn btn-secondary" @onclick="Cancel">Peruuta</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public Guid? Id { get; set; }
+
+    string btnText = string.Empty;
+
+    private ExerciseType type = new();
+
+    protected override void OnInitialized()
+    {
+        btnText = Id == null ? "Lisää Laji" : "Tallenna Muutos";
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id is not null)
+        {
+            var result = await ClientExerciseTypeData.GetExerciseType((Guid)Id);
+            if (result is not null)
+            {
+                type = result;
+            }
+        }
+        else
+        {          
+            NavigationManager.NavigateTo("/urheilulaji");
+        }
+    }
+
+    async Task HandleSubmit()
+    {
+        if(Id is null)
+        {
+            await ClientExerciseTypeData.CreateExerciseType(type);
+        }
+        else
+        {
+            await ClientExerciseTypeData.UpDateExerciseType((Guid)Id, type);
+        }
+    }
+    async Task DeleteExerciseType()
+    {
+        await ClientExerciseTypeData.DeleteExerciseType(type.ExerciseTypeId);
+    }  
+    private void Cancel()
+    {
+        NavigationManager.NavigateTo("/urheilulajit");
+    }
+}

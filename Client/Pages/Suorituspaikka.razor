@@ -1,0 +1,100 @@
+﻿@page "/suorituspaikka"
+@page "/suorituspaikka/{id:guid}"
+@using Exercisediary.Shared
+@inject IClientLocationData ClientLocationData
+@inject NavigationManager NavigationManager
+
+@if(Id is null)
+{
+    <PageTitle>Lisää Uusi Suorituspaikka</PageTitle>
+    <h3>Lisää Uusi Suorituspaikka</h3>
+
+    <div class="row">
+        <div class="col-sm-5">
+            <EditForm Model="paikka" OnSubmit="HandleSubmit">
+                <div class="mb-3">
+                    <label for="city">Kunta</label>
+                    <InputText id="city" @bind-Value="paikka.City" class="form-control"></InputText>
+                </div>
+                <div class="mb-3">
+                    <label for="place">Paikka</label>
+                    <InputText id="place" @bind-Value="paikka.Place" class="form-control"></InputText>
+                </div>
+                <button type="submit" class="btn btn-primary">@btnText</button>
+                <button type="button" class="btn btn-secondary" @onclick="Cancel">Peruuta</button>
+            </EditForm>
+        </div>
+    </div>
+}
+else
+{
+    <PageTitle>Muokkaa Suorituspaikan tietoja</PageTitle>
+    <h3>Muokkaa Suorituspaikan tietoja</h3>
+
+    <div class="row">
+        <div class="col-sm-5">
+            <EditForm Model="paikka" OnSubmit="HandleSubmit">
+                <div class="mb-3">
+                    <label for="city">Kunta</label>
+                    <InputText id="city" @bind-Value="paikka.City" class="form-control"></InputText>
+                </div>
+                <div class="mb-3">
+                    <label for="place">Paikka</label>
+                    <InputText id="place" @bind-Value="paikka.Place" class="form-control"></InputText>
+                </div>
+                <button type="submit" class="btn btn-primary">@btnText</button>
+                <button type="button" class="btn btn-danger" @onclick="DeleteLocation">Poista Suorituspaikka</button>
+                <button type="button" class="btn btn-secondary" @onclick="Cancel">Peruuta</button>
+            </EditForm>
+        </div>
+    </div>  
+}
+
+@code {
+    [Parameter]
+    public Guid? Id { get; set; }
+    string btnText = string.Empty;
+    private Location paikka = new() 
+    {
+        City = string.Empty,
+        Place = string.Empty 
+    };
+    protected override void OnInitialized()
+    {
+        btnText = Id == null ? "Lisää Uusi Paikka" : "Tallenna Muutos";
+    }
+    protected override async Task OnParametersSetAsync()
+    {
+        if(Id is not null)
+        {
+            var result = await ClientLocationData.GetLocationById((Guid)Id);
+            if(result is not null)
+            {
+                paikka = result;
+            }
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/suorituspaikka");
+        }
+    }
+    async Task HandleSubmit()
+    {
+        if(Id is null)
+        {
+            await ClientLocationData.CreateLocation(paikka);
+        }
+        else
+        {
+            await ClientLocationData.UpdateLocation((Guid)Id, paikka);
+        }
+    }
+    async Task DeleteLocation()
+    {
+        await ClientLocationData.DeleteLocation(paikka.LocationId);
+    }
+    private void Cancel()
+    {
+        NavigationManager.NavigateTo("/suorituspaikat");
+    }
+}
