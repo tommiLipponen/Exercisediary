@@ -9,7 +9,7 @@
 <button class="btn btn-success" @onclick="CreateNewExercise">Lisää Uusi Harjoite</button>
 
 <QuickGrid Items="@filteredExercises" Pagination="@pagination" >
-    <PropertyColumn Property="exercises => exercises.ExerciseType.ExerciseName" Title="Urheilulaji" Sortable="true">
+    <PropertyColumn Property="exercises => exercises.ExerciseType.ExerciseName" Title="Urheilulaji" Sortable="true">  @*pieni muutos GIT versioo varten*@
         <ColumnOptions>
             <div class="search-box">
                 <input type="search"
