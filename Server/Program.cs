@@ -27,23 +27,13 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
-        options => options.UseNetTopologySuite());
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+      //  options => options.UseNetTopologySuite());
 });
 
 builder.Services.AddScoped<IExerciseData, ExerciseData>();
 builder.Services.AddScoped<IExerciseTypeData, ExerciseTypeData>();
 builder.Services.AddScoped<ILocationData, LocationData>();
-//var jsonoptions = new JsonSerializerOptions
-//{
-//    WriteIndented = true,
-//    Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-//    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-//    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-//    NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals,
-    
-//};
-//builder.Services.AddSingleton(jsonoptions);
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
