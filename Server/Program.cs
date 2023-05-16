@@ -1,4 +1,4 @@
-﻿
+﻿using System.Threading.RateLimiting;
 using ExerciseDiary.Server.Data;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +30,25 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
       //  options => options.UseNetTopologySuite());
 });
+
+builder.Services.AddRateLimiter(options =>
+{
+    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.Request.Headers.Host.ToString(),
+            factory: partition => new FixedWindowRateLimiterOptions
+            {
+                AutoReplenishment = true,
+                PermitLimit = 10,
+                QueueLimit = 10,
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                Window = TimeSpan.FromSeconds(10)
+            }
+            ));
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+});
+
+
 
 builder.Services.AddScoped<IExerciseData, ExerciseData>();
 builder.Services.AddScoped<IExerciseTypeData, ExerciseTypeData>();
@@ -78,6 +97,7 @@ app.UseRouting();
 
 app.MapRazorPages();
 app.MapControllers();
+app.UseRateLimiter();
 app.MapFallbackToFile("index.html");
 
 
