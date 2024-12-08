@@ -23,7 +23,7 @@
 
 
 <div class="grid">
-    <QuickGrid Items="@FilteredExercises" Pagination="@pagination">
+    <QuickGrid Items="@FilteredExercises" Pagination="state">
         <PropertyColumn Property="@(e => e.ExerciseType.ExerciseName)" Title="Urheilulaji" Sortable="true"> 
             <ColumnOptions>
                 <div class="search-box">
@@ -51,12 +51,12 @@
     </QuickGrid>
 </div>
 
-<Paginator Value="@pagination" />
+<Paginator State="state" />
 
 
 @code {
     private IEnumerable<Exercise> exercises = new List<Exercise>().AsQueryable();
-    PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
+    PaginationState state = new PaginationState { ItemsPerPage = 10 };
     string? exerciseTypeFilter;
     string? locationFilter;
 
