@@ -1,58 +1,60 @@
-﻿@page "/harjoitteet"
+@page "/harjoitteet"
 @using Exercisediary.Shared;
 @inject IClientExerciseData ClientExerciseData
 @inject NavigationManager NavigationManager
 
 <PageTitle>Harjoitteet</PageTitle>
 
-<style>
-    #muokkaabutton {
-        float: right;
-    }
-</style>
-
-
-<div class="mb-3">
-    <h3>Harjoitteet</h3>
-</div>
-
-<div class="mb-5">
-    <button class="btn btn-success" @onclick="CreateNewExercise">Lisää Uusi Harjoite</button>
-</div>
-
-
-
-<div class="grid">
-    <QuickGrid Items="@FilteredExercises" Pagination="state">
-        <PropertyColumn Property="@(e => e.ExerciseType.ExerciseName)" Title="Urheilulaji" Sortable="true"> 
-            <ColumnOptions>
-                <div class="search-box">
-                    <input type="search" autofocus @bind="exerciseTypeFilter" @bind:event="oninput" placeholder="Hae Laji..." />
+<main>
+    <div class="container mt-4">
+        <h1 class="mb-3">Harjoitteet</h1>
+        <p class="lead mb-4">Tarkastele ja hallinnoi harjoituksiasi. Voit lisätä, muokata ja poistaa suorituksia helposti.</p>
+        <div class="row g-4">
+            <div class="col-12 col-lg-8">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <button class="btn btn-success mb-3" @onclick="CreateNewExercise">Lisää Uusi Harjoite</button>
+                        <div class="grid">
+                            <QuickGrid Items="@FilteredExercises" Pagination="state">
+                                <PropertyColumn Property="@(e => e.ExerciseType.ExerciseName)" Title="Urheilulaji" Sortable="true"> 
+                                    <ColumnOptions>
+                                        <div class="search-box">
+                                            <input type="search" autofocus @bind="exerciseTypeFilter" @bind:event="oninput" placeholder="Hae Laji..." />
+                                        </div>
+                                    </ColumnOptions>
+                                </PropertyColumn>
+                                <PropertyColumn Property="@(e => e.Location.City)" Title="Paikkakunta" Sortable="true">
+                                    <ColumnOptions>
+                                        <div class="search-box">
+                                            <input type="search" autofocus @bind="locationFilter" @bind:event="oninput" placeholder="Hae Paikkakunta..." />
+                                        </div>
+                                    </ColumnOptions>
+                                </PropertyColumn>
+                                <PropertyColumn Property="exercises => exercises.StartTime" Title="Aloitusaika" Format="dd MM yyyy HH:mm" Align="Align.Center" Sortable="true" />
+                                <PropertyColumn Property="exercises => exercises.EndTime" Title="Lopetusaika" Format="dd MM yyyy HH:mm" Align="Align.Center" />
+                                <PropertyColumn Property="exercises => exercises.Duration" Title="Kesto min" Sortable="true" Align="Align.Center" />
+                                <PropertyColumn Property="exercises => exercises.Notes" Title="Muistio" />
+                                <PropertyColumn Property="exercises => exercises.MetersTraveled" Title="Matka m" Sortable="true" Align="Align.Center" />
+                                <TemplateColumn Title="Toiminnot">
+                                    <button class="btn btn-primary" id="muokkaabutton" @onclick="(() => ShowExercise(context.ExerciseId))">Tiedot/Muokkaus</button>
+                                </TemplateColumn>
+                            </QuickGrid>
+                        </div>
+                        <Paginator State="state" />
+                    </div>
                 </div>
-            </ColumnOptions>
-        </PropertyColumn>
-        
-        <PropertyColumn Property="@(e => e.Location.City)" Title="Paikkakunta" Sortable="true">
-            <ColumnOptions>
-                <div class="search-box">
-                    <input type="search" autofocus @bind="locationFilter" @bind:event="oninput" placeholder="Hae Paikkakunta..." />
+            </div>
+            <div class="col-12 col-lg-4">
+                <div class="card sticky-top" style="top:1rem">
+                    <div class="card-body">
+                        <h2 class="card-title">Vinkki</h2>
+                        <p class="card-text">Voit hakea harjoitteita lajin tai paikkakunnan mukaan. Käytä hakukenttiä taulukon yläpuolella.</p>
+                    </div>
                 </div>
-            </ColumnOptions>
-        </PropertyColumn>
-
-        <PropertyColumn Property="exercises => exercises.StartTime" Title="Aloitusaika" Format="dd MM yyyy HH:mm" Align="Align.Center" Sortable="true" />
-        <PropertyColumn Property="exercises => exercises.EndTime" Title="Lopetusaika" Format="dd MM yyyy HH:mm" Align="Align.Center" />
-        <PropertyColumn Property="exercises => exercises.Duration" Title="Kesto min" Sortable="true" Align="Align.Center" />
-        <PropertyColumn Property="exercises => exercises.Notes" Title="Muistio" />
-        <PropertyColumn Property="exercises => exercises.MetersTraveled" Title="Matka m" Sortable="true" Align="Align.Center" />
-        <TemplateColumn Title="Toiminnot">
-            <button class="btn btn-primary" id="muokkaabutton" @onclick="(() => ShowExercise(context.ExerciseId))">Tiedot/Muokkaus</button>
-        </TemplateColumn>
-    </QuickGrid>
-</div>
-
-<Paginator State="state" />
-
+            </div>
+        </div>
+    </div>
+</main>
 
 @code {
     private IEnumerable<Exercise> exercises = new List<Exercise>().AsQueryable();
@@ -91,7 +93,6 @@
     {
         NavigationManager.NavigateTo("/harjoite");
     }
-
 }
 
 

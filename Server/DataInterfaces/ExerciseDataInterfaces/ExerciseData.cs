@@ -1,5 +1,6 @@
 ﻿using Exercisediary.Shared;
 using ExerciseDiary.Server.Data;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace Exercisediary.Server.DataInterfaces.ExerciseDataInterfaces
@@ -30,18 +31,39 @@ namespace Exercisediary.Server.DataInterfaces.ExerciseDataInterfaces
         }
         public async Task UpdateExercise(Exercise exercise)
         {
-            _context.Entry(exercise).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+             _context.Entry(exercise).State = EntityState.Modified;
+              await _context.SaveChangesAsync();
+
+            
         }
 
         public async Task DeleteExercise(Guid id)
         {
-            var exercise = await GetExerciseById(id);
-            if(exercise != null)
+            //var exercise = await GetExerciseById(id);
+            //if(exercise != null)
+            //{
+            //    _context.Exercises.Remove(exercise);
+            //    await _context.SaveChangesAsync();
+            //}
+
+            try
             {
-                _context.Exercises.Remove(exercise);
-                await _context.SaveChangesAsync();
+                var affectedRows = await _context.Exercises
+                   .Where(e => e.ExerciseId == id)
+                   .ExecuteDeleteAsync();
+
+                if (affectedRows == 0)
+                {
+                    return;
+                }
             }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+           
         }
         public async Task<IEnumerable<Exercise>> GetExercisesByLocationId(Guid locationId)
         {

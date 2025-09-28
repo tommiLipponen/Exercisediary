@@ -1,39 +1,54 @@
-﻿@page "/suorituspaikat"
+@page "/suorituspaikat"
 @inject IClientLocationData ClientLocationData
 @inject NavigationManager NavigationManager
 
 <PageTitle>Suorituspaikat</PageTitle>
-<h3>Suorituspaikat</h3>
-<style>
-    #muokkaabutton {
-        float: right;
-    }
-</style>
-
-<button class="btn btn-success" @onclick="CreateNewLocation">Lisää Uusi Paikka</button>
-<div class="col-sm-5">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Kunta</th>
-                <th>Paikka</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var paikka in ClientLocationData.Paikat)
-            {
-                <tr>
-                    <td>@paikka.City</td>
-                    <td>@paikka.Place</td>                    
-                    <td>
-                        <button class="btn btn-primary" id="muokkaabutton" @onclick="(() => ShowLocation(paikka.LocationId))">Muokkaa</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+<main>
+    <div class="container mt-4">
+        <h1 class="mb-3">Suorituspaikat</h1>
+        <p class="lead mb-4">Hallinnoi suorituspaikkoja, joita voit käyttää harjoitteiden yhteydessä.</p>
+        <div class="row g-4">
+            <div class="col-12 col-lg-8">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <button class="btn btn-success mb-3" @onclick="CreateNewLocation">Lisää Uusi Paikka</button>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Kunta</th>
+                                        <th>Paikka</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var paikka in ClientLocationData.Paikat)
+                                    {
+                                        <tr>
+                                            <td>@paikka.City</td>
+                                            <td>@paikka.Place</td>                    
+                                            <td>
+                                                <button class="btn btn-primary" id="muokkaabutton" @onclick="(() => ShowLocation(paikka.LocationId))">Muokkaa</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4">
+                <div class="card sticky-top" style="top:1rem">
+                    <div class="card-body">
+                        <h2 class="card-title">Vinkki</h2>
+                        <p class="card-text">Voit lisätä uusia suorituspaikkoja tai muokata olemassa olevia. Paikat ovat käytettävissä harjoitteiden yhteydessä.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
 
 @code {
     protected override async Task OnInitializedAsync()

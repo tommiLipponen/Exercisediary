@@ -1,0 +1,15 @@
+/* Styles for Harjoite (edit) page */
+
+.card .card-title { color: var(--primary-strong); }
+
+.form-group label { font-weight: 600; }
+
+.form-control { min-height: 2.2rem; }
+
+/* Adjust spacing for mobile */
+@media (max-width: 767.98px) {
+    .col-sm-5 { width: 100%; }
+}
+
+/* Button spacing */
+.btn + .btn { margin-left: 0.5rem; }

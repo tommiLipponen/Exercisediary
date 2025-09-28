@@ -1,46 +1,51 @@
-﻿@page "/urheilulaji"
+@page "/urheilulaji"
 @page "/urheilulaji/{id:guid}"
 @using Exercisediary.Shared;
 @inject IClientExerciseTypeData ClientExerciseTypeData
 @inject NavigationManager NavigationManager
 
-@if(Id is null)
-{
-    <PageTitle>Lisää Urheilulaji</PageTitle>
-    <h3>Lisää Urheilulaji</h3>
-
-    <div class="row">
-        <div class="col-sm-4">
-            <EditForm Model="type" OnSubmit="HandleSubmit">
-                <div class="mb-3">
-                    <label for="exercisename">Urheilulaji</label>
-                    <InputText id="exercisename" @bind-Value="type.ExerciseName" class="form-control"></InputText>
+<main>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12 col-lg-8">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        @if(Id is null)
+                        {
+                            <PageTitle>Lisää Urheilulaji</PageTitle>
+                            <h1 class="mb-3">Lisää Urheilulaji</h1>
+                        }
+                        else
+                        {
+                            <PageTitle>Muokkaa @type.ExerciseName</PageTitle>
+                            <h1 class="mb-3">Muokkaa @type.ExerciseName</h1>
+                        }
+                        <EditForm Model="type" OnSubmit="HandleSubmit">
+                            <div class="mb-3">
+                                <label for="exercisename">Urheilulaji</label>
+                                <InputText id="exercisename" @bind-Value="type.ExerciseName" class="form-control"></InputText>
+                            </div>
+                            <button type="submit" class="btn btn-primary">@btnText</button>
+                            @if (Id is not null)
+                            {
+                                <button type="button" class="btn btn-danger ms-2" @onclick="DeleteExerciseType">Poista Laji</button>
+                            }
+                            <button type="button" class="btn btn-secondary ms-2" @onclick="Cancel">Peruuta</button>
+                        </EditForm>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary">@btnText</button>
-                <button type="button" class="btn btn-secondary" @onclick="Cancel">Peruuta</button>
-            </EditForm>
+            </div>
+            <div class="col-12 col-lg-4">
+                <div class="card sticky-top" style="top:1rem">
+                    <div class="card-body">
+                        <h2 class="card-title">Vinkki</h2>
+                        <p class="card-text">Anna lajille selkeä nimi. Lajit ovat käytettävissä harjoitteiden yhteydessä.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-}
-else
-{
-    <PageTitle>Muokkaa @type.ExerciseName</PageTitle>
-    <h3>Muokkaa @type.ExerciseName</h3>
-
-    <div class="row">
-        <div class="col-sm-4">
-            <EditForm Model="type" OnSubmit="HandleSubmit">
-                <div class="mb-3">
-                    <label for="exercisename">Urheilulaji</label>
-                    <InputText id="exercisename" @bind-Value="type.ExerciseName" class="form-control"></InputText>
-                </div>
-                <button type="submit" class="btn btn-primary">@btnText</button>
-                <button type="button" class="btn btn-danger" @onclick="DeleteExerciseType">Poista Laji</button>
-                <button type="button" class="btn btn-secondary" @onclick="Cancel">Peruuta</button>
-            </EditForm>
-        </div>
-    </div>
-}
+</main>
 
 @code {
     [Parameter]

@@ -1,0 +1,34 @@
+/* Styles scoped to Urheilulajit.razor */
+
+/* Use global color variables declared in app.css */
+.card .card-title {
+    color: var(--primary-strong);
+}
+
+/* Table styling for better readability */
+.table {
+    margin-bottom: 0;
+}
+.table td, .table th {
+    vertical-align: middle;
+}
+
+/* Edit button alignment: keep on the right for larger screens, stack on small screens */
+#muokkaabutton {
+    float: right;
+}
+
+@media (max-width: 767.98px) {
+    #muokkaabutton {
+        float: none;
+        display: block;
+        margin-left: auto;
+        margin-top: 0.25rem;
+    }
+}
+
+/* Slightly increase row spacing for touch targets */
+.table tbody tr td {
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+}

@@ -1,0 +1,4 @@
+/* Styles for single location page */
+.card .card-title { color: var(--primary-strong); }
+.form-control { min-height: 2.2rem; }
+.btn + .btn { margin-left: 0.5rem; }

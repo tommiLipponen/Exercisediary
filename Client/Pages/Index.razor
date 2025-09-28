@@ -1,34 +1,147 @@
-﻿@page "/"
+@page "/"
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Harjoituspäiväkirja</PageTitle>
 
+<a href="#maincontent" class="skip-link">Siirry sisältöön</a>
 
+<main id="maincontent">
 
-<h1>.NET 7</h1>
-<h1>Päivitetty .NET 8 12/24</h1>
+<!-- Modal Window -->
+@if (showModal)
+{
+    <div class="custom-modal-overlay">
+        <div class="custom-modal-content">
+            <div class="custom-modal-text">TÄMÄ ON VAIN KOODAUSHARJOITUS</div>
+            <button class="custom-modal-btn" @onclick="CloseModal">SISÄISTIN !</button>
+        </div>
+    </div>
+}
 
+<h1 class="mb-3">Harjoituspäiväkirja</h1>
 
+<p class="lead mb-4">Kirjaa suorituksesi nopeasti ja seuraa kehitystäsi.<br />Voit lisätä harjoituksia, määritellä lajeja ja tallentaa paikkoja.</p>
 
-<div class="mb-5">
-    <ul>
-        <li>Azure MySQL</li>
-        <li>Azure AppService</li>
-        <li>Entity Framework 7</li>
-        <li>ASP NET Core</li>
-        <li>Blazor WASM</li>
-        <li>CI/CD GitHub Actions</li>
-    </ul>
+<div class="row g-4">
+    <div class="col-12 col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Aloita</h4>
+                <p class="card-text">Siirry haluamaasi kohtaan käyttämällä vasemmassa reunassa olevaa valikkoa.<br />Suosittelemme aloittamaan Harjoitteet-sivulta, jolta voit lisätä uuden suorituksen.</p>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-body">
+                <h4 class="card-title">Mitä sovellus tekee</h4>
+                <ul class="mb-0">
+                    <li>Lisää, muokkaa ja poista harjoituksia.</li>
+                    <li>Hallinnoi urheilulajeja ja suorituspaikkoja.</li>
+                    <li>Tallentaa tiedot pilveen ja synkronoi useiden laitteiden välillä.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-body">
+                <h4 class="card-title">Tunnetut ongelmat</h4>
+                <ul class="mb-0">
+                    <li>Ajoittain aloitus- ja lopetusaikojen syöttö voi aiheuttaa virheellisiä minuuttimääriä.<br />Vältä syöttämästä aikaa siten, että lopetusaika on ennen aloitusaikaa.</li>
+                    <li>Koordinaattien desimaalierotin voi vaihdella selaimen kieliasetusten mukaan.<br />Käytä desimaalierottimena pistettä (.), jos tallennus epäonnistuu.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <SurveyPrompt Title="Kysyttävää?" />
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+        <div class="card sticky-top" style="top:1rem">
+            <div class="card-body">
+                <h2 class="card-title">Asenna (PWA)</h2>
+                <p class="card-text">Voit asentaa sovelluksen laitteeseesi (PWA). Asennus tallentaa sovelluksen selaimen välimuistiin — se ei asenna tiedostoja laitteen levylle. Asennettu sovellus toimii myös offline-tilassa rajoitetusti.</p>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title">Tekniset tiedot</h2>
+                <div class="row g-2 align-items-center">
+                    <div class="col-3 col-md-2 text-center">
+                        <a class="tech-link" href="https://learn.microsoft.com/aspnet/core/blazor/?view=aspnetcore-8.0" target="_blank" rel="noopener noreferrer">
+                            <img src="/images/blazor.svg" alt="Blazor" class="img-fluid tech-logo" />
+                            <span class="visually-hidden">Blazor — avautuu uuteen välilehteen</span>
+                        </a>
+                    </div>
+                    <div class="col-9 col-md-10">Blazor WebAssembly (asiakaspuoli)</div>
+
+                    <div class="col-3 col-md-2 text-center">
+                        <a class="tech-link" href="https://learn.microsoft.com/dotnet/" target="_blank" rel="noopener noreferrer">
+                            <img src="/images/dotnet-core.svg?v=1" aria-label=".NET" alt=".NET" class="img-fluid tech-logo" />
+                            <span class="visually-hidden">.NET — avautuu uuteen välilehteen</span>
+                        </a>
+                    </div>
+                    <div class="col-9 col-md-10">ASP.NET Core Web API / .NET 8 (palvelinpuoli)</div>
+
+                    <div class="col-3 col-md-2 text-center">
+                        <a class="tech-link" href="https://dev.mysql.com/doc/" target="_blank" rel="noopener noreferrer">
+                            <img src="/images/mysql.svg" alt="MySQL" class="img-fluid tech-logo" />
+                            <span class="visually-hidden">MySQL — avautuu uuteen välilehteen</span>
+                        </a>
+                    </div>
+                    <div class="col-9 col-md-10">MySQL (tietokanta) + Entity Framework Core</div>
+
+                    <div class="col-3 col-md-2 text-center">
+                        <a class="tech-link" href="https://docs.github.com/en/actions" target="_blank" rel="noopener noreferrer">
+                            <img src="/images/github.svg" alt="GitHub" class="img-fluid tech-logo" />
+                            <span class="visually-hidden">GitHub — avautuu uuteen välilehteen</span>
+                        </a>
+                    </div>
+                    <div class="col-9 col-md-10">CI/CD: GitHub Actions (työnkulut sijaitsevat .github/workflows-kansiossa)</div>
+
+                    <div class="col-3 col-md-2 text-center">
+                        <a class="tech-link" href="https://learn.microsoft.com/azure/" target="_blank" rel="noopener noreferrer">
+                            <img src="/images/azure.svg" alt="Azure" class="img-fluid tech-logo" />
+                            <span class="visually-hidden">Azure — avautuu uuteen välilehteen</span>
+                        </a>
+                    </div>
+                    <div class="col-9 col-md-10">Azure: isännöinti ja hallinnoitu MySQL (tuotantokäytössä)</div>
+
+                    <div class="col-3 col-md-2 text-center">
+                        <a class="tech-link" href="https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps" target="_blank" rel="noopener noreferrer">
+                            <img src="/images/pwa.svg" alt="PWA" class="img-fluid tech-logo" />
+                            <span class="visually-hidden">PWA — avautuu uuteen välilehteen</span>
+                        </a>
+                    </div>
+                    <div class="col-9 col-md-10">PWA: manifest ja service worker (asennettavissa)</div>
+                </div>
+                <hr />
+                <p class="small mb-0">Paikallinen kehitys: dotnet run --project Server/Exercisediary.Server.csproj ja dotnet run --project Client/Exercisediary.Client.csproj</p>
+            </div>
+        </div>
+    </div>
 </div>
-<h6 class="mb-5">Sovelluksen voi ladata osoiterivillä olevasta napista. Se latautuu selaimen muistiin eikä levylle ja käyttäytyy kuin natiivi sovellus, myös puhelimissa. Toimii myös off-line tilassa.</h6>
 
-<div class="mb-5">
-    <SurveyPrompt Title="Kysyttävää?" />
-</div>
+</main>
 
-<h4 class="mb-2">Tunnetut Bugit</h4>
-<div class="mb-5">
-    <ul>
-        <li>Aloitus- ja lopetusajan voi syöttää niin että kanta laskee suoritusaika minuutit negatiiviseksi.</li>
-        <li>Koordinaattien desimaalierotin määräytyy käyttäjän selaimen kieliasetusten mukaan. Suomalaisessa 'piste' ei toimi, eikä data mene kantaan.</li>     
-    </ul>
-</div>
+@code {
+    private bool showModal = false;
+    private bool modalShown = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !modalShown)
+        {
+            modalShown = true;
+            await Task.Delay(1000);
+            showModal = true;
+            StateHasChanged();
+        }
+    }
+
+    private void CloseModal()
+    {
+        showModal = false;
+    }
+}

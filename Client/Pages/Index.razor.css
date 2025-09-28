@@ -1,0 +1,107 @@
+/* Styles scoped to Index.razor */
+
+/* Tech logos hover effect for Index page */
+img.tech-logo, .tech-logo {
+    display: inline-block;
+    max-width: 48px;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    transition: transform 200ms ease, filter 200ms ease, box-shadow 200ms ease;
+    will-change: transform, filter;
+    background: #fff;
+}
+
+img.tech-logo:hover, img.tech-logo:focus, img.tech-logo:focus-visible, .tech-logo:hover, .tech-logo:focus {
+    transform: scale(1.12) translateY(-3px);
+    -webkit-transform: scale(1.12) translateY(-3px);
+    filter: drop-shadow(0 6px 12px rgba(81,43,212,0.18));
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+img.tech-logo:active, .tech-logo:active {
+    transform: scale(1.05) translateY(-1px);
+}
+
+/* accessibility: keyboard focus */
+img.tech-logo:focus, .tech-logo:focus {
+    outline: 3px solid rgba(81,43,212,0.18);
+    outline-offset: 4px;
+}
+
+.img-fluid {
+    max-width: 100%;
+    height: auto;
+    min-width: 32px;
+    min-height: 32px;
+}
+
+/* Responsive fix: stack logo above text on tablets (iPad Pro etc) */
+@media (max-width: 1100px) and (min-width: 768px) {
+    .row.g-2.align-items-center > [class^="col-"] {
+        flex: 0 0 100%;
+        max-width: 100%;
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+    .row.g-2.align-items-center > .col-3.col-md-2.text-center {
+        margin-bottom: 0.2rem;
+    }
+    .row.g-2.align-items-center > .col-9.col-md-10 {
+        margin-bottom: 1.2rem;
+    }
+}
+
+/* Extra: ensure no overlap on all screens */
+.row.g-2.align-items-center > [class^="col-"] {
+    word-break: break-word;
+}
+
+/* Modal overlay styles */
+.custom-modal-overlay {
+    position: fixed;
+    z-index: 2000;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.75); /* transparent black */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.custom-modal-content {
+    background: none;
+    border: none;
+    box-shadow: none;
+    text-align: center;
+}
+
+.custom-modal-text {
+    color: #d6c6f7; /* light violet, matches index bg */
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    text-shadow: 0 2px 8px #000;
+}
+
+.custom-modal-btn {
+    background: #7c3aed; /* violet, like left pane */
+    color: #fff;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.75rem 2.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px #0002;
+    transition: background 0.2s;
+    cursor: pointer;
+}
+.custom-modal-btn:hover, .custom-modal-btn:focus {
+    background: #5b21b6;
+    outline: none;
+}

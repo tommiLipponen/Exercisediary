@@ -1,0 +1,21 @@
+/* Styles scoped to Harjoitteet.razor */
+
+/* Use global color variables from app.css */
+.card .card-title { color: var(--primary-strong); }
+
+/* QuickGrid adjustments */
+.grid { margin-top: 0.5rem; }
+.search-box input[type=search] { width: 100%; padding: 0.35rem 0.5rem; border-radius: 6px; border: 1px solid rgba(0,0,0,0.08); }
+
+/* Paginator spacing */
+.Paginator { margin-top: 1rem; }
+
+/* Edit button alignment */
+#muokkaabutton { float: right; }
+@media (max-width: 767.98px) { #muokkaabutton { float: none; display:block; margin-top:0.35rem; } }
+
+/* Table/row spacing for touch */
+.quickgrid .qg-row > * { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+
+/* Small helper to ensure inputs have consistent sizing */
+.form-control { min-height: 2.2rem; }

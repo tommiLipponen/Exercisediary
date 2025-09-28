@@ -1,54 +1,55 @@
-﻿@page "/suorituspaikka"
+@page "/suorituspaikka"
 @page "/suorituspaikka/{id:guid}"
 @using Exercisediary.Shared
 @inject IClientLocationData ClientLocationData
 @inject NavigationManager NavigationManager
 
-@if(Id is null)
-{
-    <PageTitle>Lisää Uusi Suorituspaikka</PageTitle>
-    <h3>Lisää Uusi Suorituspaikka</h3>
-
-    <div class="row">
-        <div class="col-sm-5">
-            <EditForm Model="paikka" OnSubmit="HandleSubmit">
-                <div class="mb-3">
-                    <label for="city">Kunta</label>
-                    <InputText id="city" @bind-Value="paikka.City" class="form-control"></InputText>
+<main>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12 col-lg-8">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        @if(Id is null)
+                        {
+                            <PageTitle>Lisää Uusi Suorituspaikka</PageTitle>
+                            <h1 class="mb-3">Lisää Uusi Suorituspaikka</h1>
+                        }
+                        else
+                        {
+                            <PageTitle>Muokkaa Suorituspaikan tietoja</PageTitle>
+                            <h1 class="mb-3">Muokkaa Suorituspaikan tietoja</h1>
+                        }
+                        <EditForm Model="paikka" OnSubmit="HandleSubmit">
+                            <div class="mb-3">
+                                <label for="city">Kunta</label>
+                                <InputText id="city" @bind-Value="paikka.City" class="form-control"></InputText>
+                            </div>
+                            <div class="mb-3">
+                                <label for="place">Paikka</label>
+                                <InputText id="place" @bind-Value="paikka.Place" class="form-control"></InputText>
+                            </div>
+                            <button type="submit" class="btn btn-primary">@btnText</button>
+                            @if (Id is not null)
+                            {
+                                <button type="button" class="btn btn-danger ms-2" @onclick="DeleteLocation">Poista Suorituspaikka</button>
+                            }
+                            <button type="button" class="btn btn-secondary ms-2" @onclick="Cancel">Peruuta</button>
+                        </EditForm>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="place">Paikka</label>
-                    <InputText id="place" @bind-Value="paikka.Place" class="form-control"></InputText>
+            </div>
+            <div class="col-12 col-lg-4">
+                <div class="card sticky-top" style="top:1rem">
+                    <div class="card-body">
+                        <h2 class="card-title">Vinkki</h2>
+                        <p class="card-text">Anna paikkakunnalle ja paikalle selkeä nimi. Paikat ovat käytettävissä harjoitteiden yhteydessä.</p>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary">@btnText</button>
-                <button type="button" class="btn btn-secondary" @onclick="Cancel">Peruuta</button>
-            </EditForm>
+            </div>
         </div>
     </div>
-}
-else
-{
-    <PageTitle>Muokkaa Suorituspaikan tietoja</PageTitle>
-    <h3>Muokkaa Suorituspaikan tietoja</h3>
-
-    <div class="row">
-        <div class="col-sm-5">
-            <EditForm Model="paikka" OnSubmit="HandleSubmit">
-                <div class="mb-3">
-                    <label for="city">Kunta</label>
-                    <InputText id="city" @bind-Value="paikka.City" class="form-control"></InputText>
-                </div>
-                <div class="mb-3">
-                    <label for="place">Paikka</label>
-                    <InputText id="place" @bind-Value="paikka.Place" class="form-control"></InputText>
-                </div>
-                <button type="submit" class="btn btn-primary">@btnText</button>
-                <button type="button" class="btn btn-danger" @onclick="DeleteLocation">Poista Suorituspaikka</button>
-                <button type="button" class="btn btn-secondary" @onclick="Cancel">Peruuta</button>
-            </EditForm>
-        </div>
-    </div>  
-}
+</main>
 
 @code {
     [Parameter]

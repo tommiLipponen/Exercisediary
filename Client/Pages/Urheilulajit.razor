@@ -1,44 +1,52 @@
-﻿@page "/urheilulajit"
+@page "/urheilulajit"
 @inject IClientExerciseTypeData ClientExerciseTypeData
 @inject NavigationManager NavigationManager
 
 <PageTitle>Urheilulajit</PageTitle>
-<h3>Urheilulajit</h3>
-<style>
-    #muokkaabutton { 
-        float: right;
-    }
-</style>
-
-<button class="btn btn-success" @onclick="CreateNewExerciseType">Lisää Laji</button>
-<div class="col-sm-5">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Urheilulaji</th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach(var type in ClientExerciseTypeData.Types)
-            {
-                <tr>
-                    <td>@type.ExerciseName</td>
-                    
-                    <td>
-                        
-                    </td>
-                    <td>
-                        <button class="btn btn-primary" id="muokkaabutton" @onclick="(() => ShowExerciseType(type.ExerciseTypeId))">Muokkaa</button>
-                    </td>
-
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
-
+<main>
+    <div class="container mt-4">
+        <h1 class="mb-3">Urheilulajit</h1>
+        <p class="lead mb-4">Hallinnoi urheilulajeja, joita voit käyttää harjoitteiden yhteydessä.</p>
+        <div class="row g-4">
+            <div class="col-12 col-lg-8">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <button class="btn btn-success mb-3" @onclick="CreateNewExerciseType">Lisää Laji</button>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Urheilulaji</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach(var type in ClientExerciseTypeData.Types)
+                                    {
+                                        <tr>
+                                            <td>@type.ExerciseName</td>
+                                            <td>
+                                                <button class="btn btn-primary" id="muokkaabutton" @onclick="(() => ShowExerciseType(type.ExerciseTypeId))">Muokkaa</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4">
+                <div class="card sticky-top" style="top:1rem">
+                    <div class="card-body">
+                        <h2 class="card-title">Vinkki</h2>
+                        <p class="card-text">Voit lisätä uusia lajeja tai muokata olemassa olevia. Lajit ovat käytettävissä harjoitteiden yhteydessä.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
 
 @code {
     protected override async Task OnInitializedAsync()

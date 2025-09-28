@@ -1,0 +1,5 @@
+/* Styles for Suorituspaikat page */
+.card .card-title { color: var(--primary-strong); }
+.table td, .table th { vertical-align: middle; }
+#muokkaabutton { float: right; }
+@media (max-width: 767.98px) { #muokkaabutton { float:none; display:block; margin-top:0.35rem; } }
